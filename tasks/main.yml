@@ -1,0 +1,275 @@
+---
+
+    - name: "Install: Make sure the dependencies are installed"
+      apt:
+        pkg: "{{ item }}"
+        state: present
+      with_items:
+        - python-pycurl
+        - python-psycopg2
+
+    - name: "Install: Add PostgeSQL repository apt-key"
+      apt_key:
+        keyserver: keyserver.ubuntu.com
+        id: ACCC4CF8
+
+    - apt_repository:
+        repo: deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_lsb.codename }}-pgdg main
+        state: present
+        filename: postgres
+
+    - name: "Install: Install postgresql"
+      apt:
+        pkg: "{{ item }}"
+        state: present
+        update_cache: yes
+        cache_valid_time: 180
+      with_items:
+          - postgresql-{{ postgresql_version }}
+
+    - name: "Install: Install Postgresql package"
+      apt:
+        state: latest
+        name: "{{ item }}"
+      with_items:
+          - postgresql-contrib-{{ postgresql_version }}
+          - pgtop
+          - pgpool2
+
+    - name: "listen_addresses"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='listen_addresses(\s)?='
+          line='listen_addresses = {{ listen_addresses }}'
+          create=yes
+
+    - name: "listen_port"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='port(\s)?='
+          line='port = {{ listen_port }}'
+          create=yes
+
+    - name: "max_connections"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='max_connections(\s)?='
+          line='max_connections = {{ max_connections }}'
+          create=yes
+
+    - name: "shared_buffers"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='shared_buffers(\s)?='
+          line='shared_buffers = {{ shared_buffers }}'
+          create=yes
+
+    - name: "huge_pages"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='huge_pages(\s)?='
+          line='huge_pages = {{ huge_pages }}'
+          create=yes
+
+    - name: "temp_buffers"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='temp_buffers(\s)?='
+          line='temp_buffers = {{ temp_buffers }}'
+          create=yes
+
+    - name: "work_mem"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='work_mem(\s)?='
+          line='work_mem = {{ work_mem }}'
+          create=yes
+
+    - name: "maintenance_work_mem"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='maintenance_work_mem(\s)?='
+          line='maintenance_work_mem = {{ maintenance_work_mem }}'
+          create=yes
+
+    - name: "dynamic_shared_memory_type"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='dynamic_shared_memory_type(\s)?='
+          line='dynamic_shared_memory_type = {{ dynamic_shared_memory_type }}'
+          create=yes
+
+    - name: "effective_cache_size"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='effective_cache_size(\s)?='
+          line='effective_cache_size = {{ effective_cache_size }}'
+          create=yes
+
+    - name: "log_destination"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='log_destination(\s)?='
+          line='log_destination = {{ log_destination }}'
+          create=yes
+
+    - name: "timezone"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='timezone(\s)?='
+          line='timezone = {{ timezone }}'
+          create=yes
+
+    - name: "log_timezone"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='log_timezone(\s)?='
+          line='log_timezone = {{ log_timezone }}'
+          create=yes
+
+    - name: "default_text_search_config"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='default_text_search_config(\s)?='
+          line='default_text_search_config = {{ default_text_search_config }}'
+          create=yes
+
+    - name: "datestyle"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='datestyle(\s)?='
+          line='datestyle = {{ datestyle }}'
+          create=yes
+
+    # - name: "checkpoint_segments"
+    #   lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+    #       regexp='checkpoint_segments(\s)?='
+    #       line='checkpoint_segments = {{ checkpoint_segments }}'
+    #       create=yes
+
+    - name: "lc_messages"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='lc_messages(\s)?='
+          line='lc_messages = {{ lc_messages }}'
+          create=yes
+
+    - name: "lc_monetary"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='lc_monetary(\s)?='
+          line='lc_monetary = {{ lc_monetary }}'
+          create=yes
+
+    - name: "lc_numeric"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='lc_numeric(\s)?='
+          line='lc_numeric = {{ lc_numeric }}'
+          create=yes
+
+    - name: "lc_time"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+          regexp='lc_time(\s)?='
+          line='lc_time = {{ lc_time }}'
+          create=yes
+
+
+    - name: "backend_hostname0"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='backend_hostname0(\s)?='
+          line='backend_hostname0 = {{ backend_hostname0 }}'
+          create=yes
+
+
+    - name: "backend_port0"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='backend_port0(\s)?='
+          line='backend_port0 = {{ backend_port0 }}'
+          create=yes
+
+    - name: "backend_weight0"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='backend_weight0(\s)?='
+          line='backend_weight0 = {{ backend_weight0 }}'
+          create=yes
+
+    - name: "enable_pool_hba"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='enable_pool_hba(\s)?='
+          line='enable_pool_hba = {{ enable_pool_hba }}'
+          create=yes
+
+
+    - name: "num_init_children"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='num_init_children(\s)?='
+          line='num_init_children = {{ num_init_children }}'
+          create=yes
+
+    - name: "max_pool"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='max_pool(\s)?='
+          line='max_pool = {{ max_pool }}'
+          create=yes
+
+    - name: "child_life_time"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='child_life_time(\s)?='
+          line='child_life_time = {{ child_life_time }}'
+          create=yes
+
+    - name: "child_max_connections"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='child_max_connections(\s)?='
+          line='child_max_connections = {{ child_max_connections }}'
+          create=yes
+
+    - name: "connection_life_time"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='connection_life_time(\s)?='
+          line='connection_life_time = {{ child_max_connections }}'
+          create=yes
+
+    - name: "client_idle_limit"
+      lineinfile: dest=/etc/pgpool2/pgpool.conf
+          regexp='client_idle_limit(\s)?='
+          line='client_idle_limit = {{ client_idle_limit }}'
+          create=yes
+
+    - name: "pg_hba_conf right"
+      lineinfile: dest=/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf
+          regexp="^host\s+all\s+all\s+127.0.0.1/32\s+md5$"
+          insertafter="^#sIPv4slocal.+"
+          line="host    all             all  127.0.0.1/32            trust"
+
+    - name: "pg_hba_conf right"
+      lineinfile: dest=/etc/pgpool2/pool_hba.conf
+          regexp="^host\s+all\s+all\s+127.0.0.1/32\s+trust$"
+          insertafter="^#sIPv4slocal.+"
+          line="local    all             all                         trust"
+
+    - name: "pg_hba_conf right"
+      lineinfile: dest=/etc/pgpool2/pool_passwd
+          line="{{ postgresql_user_name }}:{{ postgresql_user_password|hash('md5') }}"
+
+    - name: Ensure a locale exists
+      locale_gen:
+          name: ru_RU.UTF-8
+          state: present
+
+      notify:
+          - postgresql restart
+          - pgpool2 restart
+
+    - name: restart postgres
+      service: name=postgresql state=restarted
+      changed_when: False
+
+    - name: add db
+      postgresql_db:
+          name: "{{ postgresql_db_name }}"
+          encoding: UTF-8
+      become: true
+      become_user: postgres
+
+    - name: add user
+      postgresql_user:
+          name: "{{ postgresql_user_name }}"
+          db: "{{ postgresql_db_name }}"
+          password: "{{ postgresql_user_password }}"
+          priv: CONNECT
+      become: true
+      become_user: postgres
+
+    - name: grant privileges to {{ postgresql_user_name }}
+      postgresql_privs:
+          db: "{{ postgresql_db_name }}"
+          privs: ALL
+          type: schema
+          objs: public
+          role: "{{ postgresql_user_name }}"
+      become: true
+      become_user: postgres

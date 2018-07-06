@@ -1,0 +1,6 @@
+---
+- name: postgresql restart
+  service: name=postgresql state=restarted
+
+- name: pgpool2 restart
+  service: name=pgpool2 state=restarted
