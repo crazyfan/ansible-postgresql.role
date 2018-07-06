@@ -1,3 +1,4 @@
+```
 Роль для развертывания Postgresql10
 Для работы с postgresql использовать pgpool2 port 5433
 exemple:
@@ -5,14 +6,14 @@ psql -h localhost -p 5433 -U  postgresql_user_name -W  postgresql_user_password 
 ```
 Доступные параметры для применения:
 ./vars/main.yml
+
 ```
-ansible_lsb.codename: xenial
 #### users, password, database
 postgresql_user_name: test4
 postgresql_user_password: testpass
 postgresql_db_name: testpsdb4
 postgresql_version: 10
-###############################
+```
 ```
 listen_addresses: "'localhost'"
 listen_port: 5432
@@ -30,14 +31,13 @@ datestyle: "'iso, dmy'"
 timezone: "'W-SU'"
 log_timezone: "'W-SU'"
 default_text_search_config: "'pg_catalog.english'"
-```
-#checkpoint_segments: 10
-lc_messages: "'ru_RU.UTF-8'"                     # locale for system error message
-lc_monetary: "'ru_RU.UTF-8'"                     # locale for monetary formatting
-lc_numeric: "'ru_RU.UTF-8'"                      # locale for number formatting
+lc_messages: "'ru_RU.UTF-8'"                     
+lc_monetary: "'ru_RU.UTF-8'"                     
+lc_numeric: "'ru_RU.UTF-8'"   
 lc_time: "'ru_RU.UTF-8'"
 ```
-### pgpool2
+```
+#### pgpool2
 backend_hostname0: "'localhost'"
 backend_port0: 5432
 backend_weight0: 1
