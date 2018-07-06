@@ -9,7 +9,6 @@ postgresql_user_name: test4
 postgresql_user_password: testpass
 postgresql_db_name: testpsdb4
 postgresql_version: 10
-```
 #### postgresql
 listen_addresses: "'localhost'"
 listen_port: 5432
@@ -31,8 +30,6 @@ lc_messages: "'ru_RU.UTF-8'"
 lc_monetary: "'ru_RU.UTF-8'"                     
 lc_numeric: "'ru_RU.UTF-8'"   
 lc_time: "'ru_RU.UTF-8'"
-```
-```
 #### pgpool2
 backend_hostname0: "'localhost'"
 backend_port0: 5432
