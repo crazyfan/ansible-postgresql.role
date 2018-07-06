@@ -1,15 +1,14 @@
 ```
 Роль для развертывания Postgresql10
 Для работы с postgresql использовать pgpool2 port 5433
-example: psql -h localhost -p 5433 -U  postgresql_user_name -W  postgresql_user_password postgresql_db_name
 Доступные параметры для применения: ./vars/main.yml
+```
 ```
 #### users, password, database
 postgresql_user_name: test4
 postgresql_user_password: testpass
 postgresql_db_name: testpsdb4
 postgresql_version: 10
-```
 ```
 #### postgresql
 listen_addresses: "'localhost'"
