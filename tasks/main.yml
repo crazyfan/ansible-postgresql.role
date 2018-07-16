@@ -261,6 +261,7 @@
           db: "{{ postgresql_db_name }}"
           password: "{{ postgresql_user_password }}"
           priv: CONNECT
+          encrypted: yes
       become: true
       become_user: postgres
 
